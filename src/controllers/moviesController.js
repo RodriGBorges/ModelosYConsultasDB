@@ -6,7 +6,9 @@ const controller = {
         .then(peliculas => {
             res.render('moviesList', {movies: peliculas})
         })
-        .catch()
+        .catch(err => {
+            console.log('Error al requerir las películas de la base de datos. Erorr:', err)
+        })
     }
 }
 

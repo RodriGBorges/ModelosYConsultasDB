@@ -1,27 +1,25 @@
-const { Datatypes } = require("sequelize/types");
-
-module.exports = (sequelize, Datatypes) => {
+module.exports = (sequelize, DataTypes) => {
     const Genre = sequelize.define(
         'genres',
         {
             id: {
-                type: Datatypes.INTEGER,
+                type: DataTypes.INTEGER,
                 primaryKey: true,
                 allowNull: false,
                 autoIncrement: true
             },
             name: {
-                type: Datatypes.STRING,
+                type: DataTypes.STRING,
                 allowNull: false,
                 unique: true
             },
             ranking: {
-                type: Datatypes.INTEGER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 unique: true
             },
             active: {
-                type: Datatypes.BOOLEAN,
+                type: DataTypes.BOOLEAN,
                 allowNull: false,
                 defaultValue: '1'
             }
