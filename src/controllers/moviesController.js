@@ -17,6 +17,19 @@ const controller = {
         } catch (error) {
             console.log('Error al requerir la película de la base de datos. Erorr:', error);
         }
+    },
+    newMovies: (req, res) => {
+        db.movies.findAll({
+            order: [
+                ['release_date', 'DESC']
+            ]
+        })
+        .then(peliculas => {
+            res.render('newestMovies', {movies: peliculas})
+        }) 
+        .catch(err => {
+            console.log('Error al requerir las películas de la base de datos. Erorr:', err);
+        })
     }
 }
 
