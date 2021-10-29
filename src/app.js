@@ -6,6 +6,7 @@ const indexRouter = require('./routes/index');
 
 const moviesRoutes = require('./routes/moviesRoutes');
 const genresRoutes = require('./routes/genresRoutes');
+const actorsRouter = require('./routes/actorsRouter');
 const app = express();
 
 // view engine setup
@@ -17,5 +18,6 @@ app.use(express.static(path.resolve(__dirname, '../public')));
 app.use('/', indexRouter);
 app.use(moviesRoutes);
 app.use(genresRoutes);
+app.use(actorsRouter);
 
 app.listen(port, () => console.log('Server listening at http://localhost:' + port));
