@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-    const Movie = sequelize.define(
-        'movies',
-    {
+    let alias = 'movies';
+
+    let cols = {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -37,10 +37,19 @@ module.exports = (sequelize, DataTypes) => {
         updated_at: {
             type: DataTypes.DATE
         },
-    },
-    {
+    };
+    let config = {
         timestamps: false
-    })
+    };
+
+    const Movie = sequelize.define(alias, cols, config)
+
+    Movie.associate = {models} => {
+        Movie.belongsTo(models.Genre, {
+            as:'Generos',
+            foreingKey: 'genre_id'
+        })
+    }
 
     return Movie
 }

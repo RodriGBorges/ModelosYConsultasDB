@@ -116,11 +116,16 @@ const controller = {
             where: {id: parseInt(req.params.id)}
         })
         .then( result => {
-            res.redirect('/movies')
+            if(result === 1){
+                res.redirect('/movies')
+            } else {
+                res.send('No existe la película con ese id')
+            }
+            //result = 1 si borró correctamente
         })
         .catch(err => {
             console.log('Error al borrar la película. Erorr:');
-            res.render('error', {error: err})
+            res.render('error', { error: err })
         })
     }
 }
