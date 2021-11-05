@@ -1,5 +1,6 @@
 const db = require('../database/models');
 const { Op } = require('sequelize');
+const { validationResult } = require('express-validator');
 // o se puede requerir de esta otra forma: const Op = db.sequelize.Op
 
 //Otra forma de llamar a los modelos
@@ -54,15 +55,20 @@ const controller = {
         res.render('moviesAdd');
     },
     create: function (req, res) {
-        /* console.log(req.body) */
-        db.movies.create(req.body)
-        .then( result => {
-            res.redirect(`/movies/detail/${result.id}`)
-        })
-        .catch(err => {
-            console.log('Error al crear una nueva película. Erorr:');
-            res.render('error', err);
-        })
+        let errors = validationResult(req)
+        if (errors.isEmpty()) {
+
+            db.movies.create(req.body)
+            .then( result => {
+                res.redirect(`/movies/detail/${result.id}`)
+            })
+            .catch(err => {
+                console.log('Error al crear una nueva película. Erorr:');
+                res.render('error', err);
+            })
+        } else {
+            res.render('moviesAdd', { errors: errors.mapped(), old: req.body })
+        }
     },
     edit: function(req, res) {
         db.movies.findByPk(parseInt(req.params.id))

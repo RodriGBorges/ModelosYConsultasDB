@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { list, detail, newMovies, recommended, add, create, edit, update, destroy } = require('../controllers/moviesController');
-const moviesController = require('../controllers/moviesController')
+const moviesController = require('../controllers/moviesController');
+const addMovieValidator = require('../validations/addMovieValidator');
+
 
 router.get('/movies', list);
 router.get('/movies/new', newMovies);
@@ -10,7 +12,7 @@ router.get('/movies/detail/:id', detail);
 
 //Rutas exigidas para la creación del CRUD
 router.get('/movies/add', add);
-router.post('/movies/create', create);
+router.post('/movies/create', addMovieValidator, create);
 
 router.get('/movies/edit/:id', edit);
 router.put('/movies/update/:id', update);
