@@ -28,11 +28,14 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false
         }
     )
+<<<<<<< HEAD
     Genre.associate = function (models) {
         Genre.hasMany(models.Movie, {
             as:'Peliculas',
             foreignKey: 'genre_id'
         })
     }
+=======
+>>>>>>> ManipulacionDeDatos
     return Genre
 }

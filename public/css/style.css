@@ -17,3 +17,7 @@ img{
 figure{
   width: 20%;
 }
+
+small.errors_validation {
+  color: crimson;
+}
