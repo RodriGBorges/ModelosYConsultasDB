@@ -27,25 +27,25 @@
             <label for="rating">Rating </label>
             <p><input type="number" name="rating" id="" value="<%= locals.old && old.rating ? old.rating : null %>" required > </p>
             <% if (locals.errors && errors.rating) { %>
-                <small> <%= errors.rating.msg  %> </small>
+                <small class="errors_validation"> <%= errors.rating.msg  %> </small>
                 <% } %>
             <br>
             <label for="awards">Awards </label>
             <p><input type="number" name="awards" id="" value="<%= locals.old && old.awards ? old.awards : null %>" required ></p>
             <% if (locals.errors && errors.awards) { %>
-                <small> <%= errors.awards.msg  %> </small>
+                <small class="errors_validation"> <%= errors.awards.msg  %> </small>
                 <% } %>
             <br>
             <label for="release_date">Release date </label>
             <p><input type="date" name="release_date" id="" value="<%= locals.old && old.release_date ? old.release_date : null %>" required ></p>
             <% if (locals.errors && errors.release_date) { %>
-                <small> <%= errors.release_date.msg  %> </small>
+                <small class="errors_validation"> <%= errors.release_date.msg  %> </small>
                 <% } %>
             <br>
             <label for="length">Length </label>
             <p><input type="number" name="length" id="" value="<%= locals.old && old.length ? old.length : null %>" required ></p>
             <% if (locals.errors && errors.length) { %>
-                <small> <%= errors.length.msg  %> </small>
+                <small class="errors_validation"> <%= errors.length.msg  %> </small>
                 <% } %>
 
             <br>

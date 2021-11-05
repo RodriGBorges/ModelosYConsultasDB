@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 
-const addMovieValidator = [
+const editMovieValidator = [
     check('title')
     .notEmpty().withMessage('El título de la película es obligatorio.').bail()
     .isLength({ min: 5, max: 30 }).withMessage('El título de la película debe tener entre 5 y 30 caracteres.'),
@@ -16,6 +16,7 @@ const addMovieValidator = [
     check('length')
     .notEmpty().withMessage('La duración de la película es obligatorio.').bail()
     .isInt().withMessage('La duración de la película debe ser expresada con un número sin comas ni puntos.')
-];
+]
 
-module.exports = addMovieValidator
+
+module.exports = editMovieValidator;

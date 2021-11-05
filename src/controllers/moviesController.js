@@ -85,23 +85,42 @@ const controller = {
         })
     },
     update: function (req,res) {
-        db.movies.update(
-            req.body,
-            {
-                where: {id: parseInt(req.params.id)}
-            }
-        )
-        .then(result => {
-            if (result !== 0) {
-                res.redirect(`/movies/detail/${parseInt(req.params.id)}`)
+        let errors = validationResult(req);
+
+        if (errors.isEmpty()) {
+
+            db.movies.update(
+                req.body,
+                {
+                    where: {id: parseInt(req.params.id)}
+                }
+            )
+            .then(result => {
+                if (result !== 0) {
+                    res.redirect(`/movies/detail/${parseInt(req.params.id)}`)
+                } else {
+                    res.send("Hubo un problema al editar la película.")
+                }
+            })
+            .catch(err => {
+                res.render('error', {error: err})
+                console.log('Error al editar la película. Erorr:', err);
+            })
+        } else {
+            db.movies.findByPk(parseInt(req.params.id))
+            .then(Movie => {
+            if(Movie) {
+                res.render('moviesEdit', { 
+                    Movie,
+                    errors: errors.mapped(), 
+                    old: req.body
+                })
             } else {
-                res.send("Hubo un problema al editar la película.")
+                res.send("No se encontró la película con ese id.")
             }
-        })
-        .catch(err => {
-            res.render('error', {error: err})
-            console.log('Error al editar la película. Erorr:', err);
-        })
+            })
+            
+        }
     },
     delete: function (req, res) {
         db.movies.findByPk(parseInt(req.params.id))
