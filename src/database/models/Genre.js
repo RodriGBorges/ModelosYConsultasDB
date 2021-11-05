@@ -28,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false
         }
     )
-    Genre.associate = function {models} {
+    Genre.associate = function (models) {
         Genre.hasMany(models.Movie, {
             as:'Peliculas',
-            foreingKey: 'genre_id'
+            foreignKey: 'genre_id'
         })
     }
     return Genre
