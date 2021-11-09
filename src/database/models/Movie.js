@@ -1,59 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-<<<<<<< HEAD
-    let alias = 'movies';
+    let alias = 'Movie';
     let cols = {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-            autoIncrement: true
-        },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        rating: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false
-        },
-        awards: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: '0'
-        },
-        release_date: {
-            type: DataTypes.DATE,
-            allowNull: false
-        },
-        length: {
-            type: DataTypes.INTEGER
-        },
-        genre_id: {
-            type: DataTypes.INTEGER
-        },
-        created_at: {
-            type: DataTypes.DATE
-        },
-        updated_at: {
-            type: DataTypes.DATE
-        },
-    };
-    let config = {
-        timestamps: false
-    };
-
-    const Movie = sequelize.define(alias, cols, config);
-
-    Movie.associate = (models) => {
-        Movie.belongsTo(models.Genre, {
-            as:'Generos',
-            foreignKey: 'genre_id'
-        })
-    }
-=======
-    const Movie = sequelize.define(
-        'movies',
-        {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -65,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false
             },
             rating: {
-                type: DataTypes.DECIMAL(10, 2),
+                type: DataTypes.INTEGER,
                 allowNull: false
             },
             awards: {
@@ -82,19 +29,29 @@ module.exports = (sequelize, DataTypes) => {
             },
             genre_id: {
                 type: DataTypes.INTEGER
-            },
-            created_at: {
-                type: DataTypes.DATE
-            },
-            updated_at: {
-                type: DataTypes.DATE
-            },
-        },
-        {
+            }
+        };
+    let config = {
+            tableName: 'movies',
+            timestamps: true
+        };
+    const Movie = sequelize.define(alias, cols, config);
+
+    Movie.associate = (models) => {
+        Movie.belongsTo(models.Genre, {
+            as: 'genre',
+            foreignKey: 'genre_id'
+        })
+
+        Movie.belongsToMany(models.Actor, {
+            as: 'Actors',
+            through: 'actor_movie',
+            foreignKey: 'movie_id',
+            otherKey: 'actor_id',
             timestamps: false
-        }
-    )
->>>>>>> ManipulacionDeDatos
+        })
+    }
+
 
     return Movie
 };

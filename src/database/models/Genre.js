@@ -1,7 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    const Genre = sequelize.define(
-        'genres',
-        {
+    let alias = 'Genre';
+    let cols = {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -23,19 +22,22 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: '1'
             }
-        },
-        {
-            timestamps: false
-        }
-    )
-<<<<<<< HEAD
-    Genre.associate = function (models) {
+        };
+    let config = {
+        timestamps: true,
+        createdAt: 'created_at',
+        updateAt: 'updated_at',
+        deletedAt: false
+    }
+    const Genre = sequelize.define(alias, cols, config);
+
+    //Aquí debes realizar lo necesario para crear las relaciones con el modelo (Movie)
+    Genre.associate = (models) => {
         Genre.hasMany(models.Movie, {
-            as:'Peliculas',
+            as: 'Movies',
             foreignKey: 'genre_id'
         })
     }
-=======
->>>>>>> ManipulacionDeDatos
+
     return Genre
 }

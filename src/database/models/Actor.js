@@ -1,7 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    const actor = sequelize.define(
-        'actors', 
-        {
+    let alias = 'Actor';
+    let cols = {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -24,16 +23,25 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 'No tiene'
-            },
-            created_at: {
-                type: DataTypes.DATE
-            },
-            updated_at: {
-                type: DataTypes.DATE
             }
-        },
-        {
-            timestamps: false
-        })
-        return actor
+        };
+    let config = {
+            timestamps: true,
+            createdAt: 'created_at',
+            updateAt: 'updated_at',
+            deletedAt: false
+        }
+        const Actor = sequelize.define(alias, cols, config);
+
+        Actor.associate = (models) => {
+            Actor.belongsToMany(models.Movie, {
+                as: 'Movies',
+                through: 'actor_movie',
+                foreignKey: 'actor_id',
+                otherKey: 'movie_id',
+                timestamps: false
+            })
+        }
+
+        return Actor
 }

@@ -8,7 +8,7 @@ const Movies = db.Movie;
 
 const controller = {
     list: (req, res) => {
-        db.movies.findAll()
+        db.Movie.findAll()
         .then(peliculas => {
             res.render('moviesList', { movies: peliculas })
         })
@@ -18,14 +18,14 @@ const controller = {
     },
     detail: async (req, res) => {
         try {
-            const pelicula = await db.movies.findByPk(parseInt(req.params.id))
+            const pelicula = await db.Movie.findByPk(parseInt(req.params.id))
             res.render('moviesDetail', { movie: pelicula })
         } catch (error) {
             console.log('Error al requerir la película de la base de datos. Erorr:', error);
         }
     },
     newMovies: (req, res) => {
-        db.movies.findAll({
+        db.Movie.findAll({
             order: [
                 ['release_date', 'DESC']
             ]
@@ -38,7 +38,7 @@ const controller = {
         })
     },
     recommended: (req, res) => {
-        db.movies.findAll({
+        db.Movie.findAll({
             where: {
                 rating: {[Op.gte]: 9},
                 awards: {[Op.gt]: 2}
@@ -52,13 +52,19 @@ const controller = {
         })
     }, //Aqui debemos modificar y completar lo necesario para trabajar con el CRUD
     add: function (req, res) {
-        res.render('moviesAdd');
+        db.Genre.findAll()
+        .then(allGenres => {
+            res.render('moviesAdd', {allGenres});
+        })
+        .catch(err => {
+            res.send(err)
+        })
     },
     create: function (req, res) {
         let errors = validationResult(req)
         if (errors.isEmpty()) {
 
-            db.movies.create(req.body)
+            db.Movie.create(req.body)
             .then( result => {
                 res.redirect(`/movies/detail/${result.id}`)
             })
@@ -71,25 +77,25 @@ const controller = {
         }
     },
     edit: function(req, res) {
-        db.movies.findByPk(parseInt(req.params.id))
-        .then(Movie => {
-            if(Movie) {
-                res.render('moviesEdit', { Movie })
-            } else {
-                res.send("No se encontró la película con ese id.")
-            }
-        })
-        .catch(err => {
-            console.log('Error al mostrar la película que querés editar. Erorr:');
-            res.render('error', {error: err})
-        })
+
+        try {
+            const Movie = await db.Movie.findOne({
+                where: {id: parseInt(req.params.id)},
+                include: [{association: 'genre'}]
+            })
+
+            const allGenres = await db.Genre.findAll()
+                res.render('moviesEdit', { Movie, allGenres })
+        } catch (error) {
+            res.send(error)
+        }
     },
     update: function (req,res) {
         let errors = validationResult(req);
 
         if (errors.isEmpty()) {
 
-            db.movies.update(
+            db.Movie.update(
                 req.body,
                 {
                     where: {id: parseInt(req.params.id)}
@@ -107,7 +113,7 @@ const controller = {
                 console.log('Error al editar la película. Erorr:', err);
             })
         } else {
-            db.movies.findByPk(parseInt(req.params.id))
+            db.Movie.findByPk(parseInt(req.params.id))
             .then(Movie => {
             if(Movie) {
                 res.render('moviesEdit', { 
@@ -123,7 +129,7 @@ const controller = {
         }
     },
     delete: function (req, res) {
-        db.movies.findByPk(parseInt(req.params.id))
+        db.Movie.findByPk(parseInt(req.params.id))
         .then(Movie => {
             if(Movie) {
                 res.render('moviesDelete', { Movie })
@@ -137,7 +143,7 @@ const controller = {
         })
     },
     destroy: function (req, res) {
-        db.movies.destroy({
+        db.Movie.destroy({
             where: {id: parseInt(req.params.id)}
         })
         .then( result => {
@@ -156,3 +162,48 @@ const controller = {
 }
 
 module.exports = controller;
+
+
+
+
+
+/* 
+edit:
+
+if(Movie) {
+                db.Genre.findAll()
+                .then(genres => {
+                    Movie.genre = genres.find(genre => genre.id === Movie.genre_id)
+                    return res.render('moviesEdit', { Movie, allGenres: genres })
+                })
+                .catch(err => {
+                    res.send(err)
+                })
+                
+            } else {
+                res.send("No se encontró la película con ese id.")
+            }
+
+edit sin await:
+const Movie = db.Movie.findOne({
+            where: {id: parseInt(req.params.id)},
+            include: [{association: 'genre'}]
+        })
+
+        const allGenres = db.Genre.findAll()
+
+        Promise.all([Movie, allGenres])
+        .then((result) => {
+            res.render('moviesEdit', { Movie: result[0], allGenres: result[1] })
+            
+        })
+        .catch(err => {
+            console.log('Error al mostrar la película que querés editar. Erorr:');
+            res.render('error', {error: err})
+        })
+    }
+            
+            
+            
+            
+            */
