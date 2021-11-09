@@ -85,32 +85,40 @@ const controller = {
             })
 
             const allGenres = await db.Genre.findAll()
+            if(Movie !== null) {
                 res.render('moviesEdit', { Movie, allGenres })
+            } else {
+                res.send('La película no existe')
+            }
         } catch (error) {
             res.send(error)
         }
     },
-    update: function (req,res) {
+    update: async function (req,res) {
         let errors = validationResult(req);
 
         if (errors.isEmpty()) {
 
-            db.Movie.update(
-                req.body,
-                {
-                    where: {id: parseInt(req.params.id)}
-                }
-            )
+            db.Movie.update({
+                title,
+                rating,
+                awards,
+                release_date,
+                length,
+                genre_id
+            },
+            {
+                where: {id: req.params.id}
+            })
             .then(result => {
-                if (result !== 0) {
+                if(result !== 0) {
                     res.redirect(`/movies/detail/${parseInt(req.params.id)}`)
                 } else {
-                    res.send("Hubo un problema al editar la película.")
+                    res.send('No se modificó nada')
                 }
             })
             .catch(err => {
-                res.render('error', {error: err})
-                console.log('Error al editar la película. Erorr:', err);
+                res.send(err)
             })
         } else {
             db.Movie.findByPk(parseInt(req.params.id))
