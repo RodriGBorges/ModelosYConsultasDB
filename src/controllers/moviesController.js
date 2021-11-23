@@ -19,7 +19,12 @@ const controller = {
     detail: async (req, res) => {
         try {
             const pelicula = await db.Movie.findByPk(parseInt(req.params.id))
-            res.render('moviesDetail', { movie: pelicula })
+            if(pelicula !== null) {
+                res.render('moviesDetail', { movie: pelicula })
+            } else {
+                res.send('La película no existe')
+            }
+            
         } catch (error) {
             console.log('Error al requerir la película de la base de datos. Erorr:', error);
         }
@@ -57,7 +62,10 @@ const controller = {
             res.render('moviesAdd', {allGenres});
         })
         .catch(err => {
-            res.send(err)
+            console.log("**************************************************************************************************************************")
+            console.log('Error al entrar en la vista de agregar película. Erorr: ')
+            console.log("**************************************************************************************************************************")
+            console.log(err);
         })
     },
     create: function (req, res) {
@@ -76,7 +84,7 @@ const controller = {
             res.render('moviesAdd', { errors: errors.mapped(), old: req.body })
         }
     },
-    edit: function(req, res) {
+    edit: async function(req, res) {
 
         try {
             const Movie = await db.Movie.findOne({
@@ -84,7 +92,7 @@ const controller = {
                 include: [{association: 'genre'}]
             })
 
-            const allGenres = await db.Genre.findAll()
+            var allGenres = await db.Genre.findAll()
             if(Movie !== null) {
                 res.render('moviesEdit', { Movie, allGenres })
             } else {
@@ -127,7 +135,8 @@ const controller = {
                 res.render('moviesEdit', { 
                     Movie,
                     errors: errors.mapped(), 
-                    old: req.body
+                    old: req.body,
+                    allGenres: allGenres
                 })
             } else {
                 res.send("No se encontró la película con ese id.")

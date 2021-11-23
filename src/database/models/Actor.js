@@ -26,10 +26,9 @@ module.exports = (sequelize, DataTypes) => {
             }
         };
     let config = {
+            tableName: 'actors',
             timestamps: true,
-            createdAt: 'created_at',
-            updateAt: 'updated_at',
-            deletedAt: false
+            underscored: true
         }
         const Actor = sequelize.define(alias, cols, config);
 
@@ -38,8 +37,7 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'Movies',
                 through: 'actor_movie',
                 foreignKey: 'actor_id',
-                otherKey: 'movie_id',
-                timestamps: false
+                otherKey: 'movie_id'
             })
         }
 

@@ -24,10 +24,9 @@ module.exports = (sequelize, DataTypes) => {
             }
         };
     let config = {
+        tableName: 'genres',
         timestamps: true,
-        createdAt: 'created_at',
-        updateAt: 'updated_at',
-        deletedAt: false
+        underscored: true
     }
     const Genre = sequelize.define(alias, cols, config);
 

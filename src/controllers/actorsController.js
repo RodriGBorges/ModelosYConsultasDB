@@ -1,7 +1,8 @@
 const db = require('../database/models');
+const actors = db.Actor;
 const controller = {
     listActors: (req, res) => {
-        db.actors.findAll()
+        actors.findAll()
         .then(actores => {
             res.render('actorsList', { actors: actores })
         })
@@ -11,7 +12,7 @@ const controller = {
     },
     detailActors: async (req, res) => {
         try {
-            const actor = await db.actors.findByPk(parseInt(req.params.id))
+            const actor = await actors.findByPk(parseInt(req.params.id))
             res.render('actorsDetail', { actor: actor })
         } catch (error) {
             console.log('Error al requerir el detalle del actor en la base de datos. Erorr:', error);

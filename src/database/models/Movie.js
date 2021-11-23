@@ -25,15 +25,16 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false
             },
             length: {
-                type: DataTypes.INTEGER
+                type: DataTypes.BIGINT(10)
             },
             genre_id: {
-                type: DataTypes.INTEGER
+                type: DataTypes.BIGINT(10)
             }
         };
     let config = {
             tableName: 'movies',
-            timestamps: true
+            timestamps: true,
+            underscored: true
         };
     const Movie = sequelize.define(alias, cols, config);
 
@@ -48,7 +49,6 @@ module.exports = (sequelize, DataTypes) => {
             through: 'actor_movie',
             foreignKey: 'movie_id',
             otherKey: 'actor_id',
-            timestamps: false
         })
     }
 
